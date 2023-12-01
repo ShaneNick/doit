@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Navbar from "./components/Navbar";
+import TaskCard from "./components/TaskCard";
+import AddTaskForm from "./components/AddTaskForm";
 
 function App() {
+  const [showAddTaskForm, setShowAddTaskForm] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  const handleAddTaskClick = () => {
+    setShowAddTaskForm(true);
+  };
+
+  const addNewTask = (newTask) => {
+    setTasks([...tasks, { ...newTask, id: Date.now() }]);
+    setShowAddTaskForm(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <button onClick={handleAddTaskClick}>Add Task</button>
+      {showAddTaskForm && <AddTaskForm onAdd={addNewTask} />}
+      {tasks.map(task => (
+        <TaskCard key={task.id} task={task} />
+      ))}
     </div>
   );
 }
